@@ -105,3 +105,4 @@ svd_valid = sum([x**2 for x in (yvalid_price - pred_valid)]) / len(yvalid_price)
 
 words_coef = [(words[i], mod.coef_[i]) for i in range(len(words))]
 display(sorted(words_coef, key=lambda x:(x[1]), reverse = True)[:50])
+display(sorted(words_coef, key=lambda x:(x[1]), reverse = True)[-50:])
