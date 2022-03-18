@@ -16,8 +16,8 @@ data_game = list(parse("steam_games.json.gz"))
 game_ids = {}
 for j in range(len(data_game)):
     i = data_game[j]
-    temp_price = "NA"
-    temp_discount = "NA"
+    temp_price = 0
+    temp_discount = 0
     temp_id = "NA"
     if ("id" not in i.keys()) or ("price" not in i.keys()):
         continue
@@ -26,7 +26,7 @@ for j in range(len(data_game)):
     if type(temp_price)==str: temp_price = 0
     if ('discount_price' in i.keys()):
         temp_discount = i["discount_price"]
-    game_ids[temp_id] = {"price": temp_price, "discount": temp_discount}
+    game_ids[temp_id] = {"price": temp_price, "discount": temp_price - temp_discount}
 
 review_text = []
 for i in range(len(data_review)):
@@ -96,12 +96,12 @@ yvalid_price = [d[1]["price"] for d in validXY]
 yvalid_disco = [d[1]["discount"] for d in validXY]
 
 mod = linear_model.LinearRegression()
-mod.fit(xtrain, ytrain_price)
+mod.fit(xtrain, ytrain_disco)
 
 pred_train = mod.predict(xtrain)
 pred_valid = mod.predict(xvalid)
-svd_train = sum([x**2 for x in (ytrain_price - pred_train)]) / len(ytrain_price)
-svd_valid = sum([x**2 for x in (yvalid_price - pred_valid)]) / len(yvalid_price)
+svd_train = sum([x**2 for x in (ytrain_price - pred_train)]) / len(ytrain_disco)
+svd_valid = sum([x**2 for x in (yvalid_price - pred_valid)]) / len(yvalid_disco)
 
 words_coef = [(words[i], mod.coef_[i]) for i in range(len(words))]
 display(sorted(words_coef, key=lambda x:(x[1]), reverse = True)[:50])
