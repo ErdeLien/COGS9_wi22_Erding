@@ -26,6 +26,8 @@ for j in range(len(data_game)):
     if type(temp_price)==str: temp_price = 0
     if ('discount_price' in i.keys()):
         temp_discount = i["discount_price"]
+    else:
+        temp_discount = temp_price
     game_ids[temp_id] = {"price": temp_price, "discount": temp_price - temp_discount}
 
 review_text = []
@@ -47,7 +49,6 @@ sp = set(string.punctuation)
 wordCount = defaultdict(int)
 for d in review_text_train:
     r = ''.join([c for c in d['review'].lower() if not c in sp])
-
     tokens = r.split()
     tokens = [w for w in tokens if not w in stop]
     for w in tokens:
